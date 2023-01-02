@@ -17,7 +17,8 @@ async function run() {
     try {
         const recipeCollection = client.db("arkFoodies").collection("recipes");
         const reviewCollection = client.db("arkFoodies").collection("reviews");
-
+        
+        //post reviews
         app.post("/review", async (req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
@@ -37,6 +38,7 @@ async function run() {
            res.send(result);
         })
 
+        //get reviews for specific user
         app.get("/reviews", async (req, res) => {
             let query = {};
             if (req.query.email) {
@@ -49,6 +51,18 @@ async function run() {
             console.log(result);
             res.send(result);
         })
+        
+        //delete review
+        app.delete("/reviews/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = {
+                _id: ObjectId(id)
+            }
+            const result = await reviewCollection.deleteOne(filter);
+            res.send(result);
+            console.log(result)
+        })
+
 
         app.get('/recipeslimit', async (req, res) => {
             const query = {};
