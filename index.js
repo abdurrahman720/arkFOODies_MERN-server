@@ -13,8 +13,23 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.rtntsud.mongodb.net/?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
+async function run() {
+    try {
+        const recipeCollection = client.db("arkFoodies").collection("recipes");
 
-
+        app.get("/recipes", async (req, res) => {
+            const query = {};
+            const cursor = recipeCollection.find(query);
+            const recipes = await cursor.toArray();
+            console.log(recipes);
+            res.send(recipes);
+        })
+    }
+    finally {
+        
+    }
+}
+run().catch(err => console.log(err))
 
 
 
