@@ -26,6 +26,17 @@ async function run() {
             
         })
 
+        //get reviews by recipe id
+        app.get("/review/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = {
+                recipeID: id
+            };
+            const cursor = reviewCollection.find(query);
+            const result = await cursor.toArray();
+           res.send(result);
+        })
+
         app.get('/recipeslimit', async (req, res) => {
             const query = {};
             const cursor = recipeCollection.find(query);
