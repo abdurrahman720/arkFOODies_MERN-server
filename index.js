@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const port = process.env.PORT || 5001;
 require("dotenv").config();
 
@@ -17,7 +17,7 @@ async function run() {
     try {
         const recipeCollection = client.db("arkFoodies").collection("recipes");
 
-        app.get('/recipieslimit', async (req, res) => {
+        app.get('/recipeslimit', async (req, res) => {
             const query = {};
             const cursor = recipeCollection.find(query);
             const recipes = await cursor.limit(3).toArray();
@@ -29,6 +29,15 @@ async function run() {
             const cursor = recipeCollection.find(query);
             const recipes = await cursor.toArray();
             res.send(recipes);
+        })
+
+        app.get("/recipe/:id", async (req, res) => {
+            const id = req.params.id;
+            const query = {
+                _id: ObjectId(id)
+            };
+            const recipe = await recipeCollection.findOne(query);
+            res.send(recipe);
         })
     }
     finally {
