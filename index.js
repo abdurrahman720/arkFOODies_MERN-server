@@ -16,6 +16,15 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 async function run() {
     try {
         const recipeCollection = client.db("arkFoodies").collection("recipes");
+        const reviewCollection = client.db("arkFoodies").collection("reviews");
+
+        app.post("/review", async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            console.log(result);
+            res.send(result);
+            
+        })
 
         app.get('/recipeslimit', async (req, res) => {
             const query = {};
@@ -37,8 +46,10 @@ async function run() {
                 _id: ObjectId(id)
             };
             const recipe = await recipeCollection.findOne(query);
-            res.send(recipe);
+            res.send({recipe});
         })
+
+        
     }
     finally {
         
