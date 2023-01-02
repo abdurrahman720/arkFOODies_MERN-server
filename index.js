@@ -17,11 +17,17 @@ async function run() {
     try {
         const recipeCollection = client.db("arkFoodies").collection("recipes");
 
+        app.get('/recipieslimit', async (req, res) => {
+            const query = {};
+            const cursor = recipeCollection.find(query);
+            const recipes = await cursor.limit(3).toArray();
+            res.send(recipes);
+        })
+
         app.get("/recipes", async (req, res) => {
             const query = {};
             const cursor = recipeCollection.find(query);
             const recipes = await cursor.toArray();
-            console.log(recipes);
             res.send(recipes);
         })
     }
