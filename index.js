@@ -37,6 +37,19 @@ async function run() {
            res.send(result);
         })
 
+        app.get("/reviews", async (req, res) => {
+            let query = {};
+            if (req.query.email) {
+                query = {
+                    reviewerEmail: req.query.email
+                };
+            }
+            const cursor = reviewCollection.find(query);
+            const result = await cursor.toArray();
+            console.log(result);
+            res.send(result);
+        })
+
         app.get('/recipeslimit', async (req, res) => {
             const query = {};
             const cursor = recipeCollection.find(query);
