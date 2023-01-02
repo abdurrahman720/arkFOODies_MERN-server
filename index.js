@@ -27,6 +27,28 @@ async function run() {
             
         })
 
+        //update review
+        app.patch("/review/:id", async (req, res) => {
+            const id = req.params.id;
+            
+            const reviewText = req.body.reviewText;
+            const rating  = req.body.rating;
+            console.log({ id, reviewText, rating });
+            const filter = {
+                _id : ObjectId(id)
+            }
+            const updateReview = {
+                $set: {
+                    reviewText: reviewText,
+                    rating: rating
+               }
+            }
+            const options = { upsert: true };
+
+            const result = await reviewCollection.updateOne(filter,updateReview,options);
+            res.send(result);
+        })
+
         //get reviews by recipe id
         app.get("/review/:id", async (req, res) => {
             const id = req.params.id;
@@ -37,6 +59,9 @@ async function run() {
             const result = await cursor.toArray();
            res.send(result);
         })
+
+       
+       
 
         //get reviews for specific user
         app.get("/reviews", async (req, res) => {
@@ -63,7 +88,7 @@ async function run() {
             console.log(result)
         })
 
-
+        //load on homepage
         app.get('/recipeslimit', async (req, res) => {
             const query = {};
             const cursor = recipeCollection.find(query);
@@ -71,6 +96,7 @@ async function run() {
             res.send(recipes);
         })
 
+        //load on recipes page
         app.get("/recipes", async (req, res) => {
             const query = {};
             const cursor = recipeCollection.find(query);
@@ -78,6 +104,7 @@ async function run() {
             res.send(recipes);
         })
 
+        //load specific recipe
         app.get("/recipe/:id", async (req, res) => {
             const id = req.params.id;
             const query = {
