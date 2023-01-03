@@ -22,9 +22,17 @@ async function run() {
         app.post("/review", async (req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
-            console.log(result);
+           
             res.send(result);
             
+        })
+
+        //post recipe
+        app.post("/recipe", async (req, res) => {
+            const recipe = req.body;
+            const result = await recipeCollection.insertOne(recipe);
+            console.log(result)
+            res.send(result);
         })
 
         //update review
