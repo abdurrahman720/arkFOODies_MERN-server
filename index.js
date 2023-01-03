@@ -84,6 +84,20 @@ async function run() {
             console.log(result);
             res.send(result);
         })
+
+        //get recipe for specific user
+        app.get("/recipes", async (req, res) => {
+            let query = {};
+            if (req.query.email) {
+                query = { recipeProvider: req.query.email}
+            }
+
+            const cursor = recipeCollection.find(query);
+            const result = await cursor.toArray();
+            
+            res.send(result);
+
+        })
         
         //delete review
         app.delete("/reviews/:id", async (req, res) => {
@@ -94,6 +108,17 @@ async function run() {
             const result = await reviewCollection.deleteOne(filter);
             res.send(result);
             console.log(result)
+        })
+
+        //delete recipe of user
+        app.delete("/recipe/:id", async (req, res) => {
+            const id = req.params.id;
+            const filter = {
+                _id : ObjectId(id)
+            }
+            const result = await recipeCollection.deleteOne(filter);
+            console.log(result)
+            res.send(result);
         })
 
         //load on homepage
