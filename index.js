@@ -119,7 +119,7 @@ async function run() {
         })
 
         //get recipe for specific user
-        app.get("/recipes",verifyJWT, async (req, res) => {
+        app.get("/user-recipes",verifyJWT, async (req, res) => {
             let query = {};
             if (req.query.email) {
                 query = { recipeProvider: req.query.email}
